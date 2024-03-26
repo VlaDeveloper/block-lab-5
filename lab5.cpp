@@ -5,13 +5,13 @@
 
 using namespace std;
 
-// размер матрицы
+// СЂР°Р·РјРµСЂ РјР°С‚СЂРёС†С‹
 const int N = 200;
 
-// часть строки матрицы А
+// С‡Р°СЃС‚СЊ СЃС‚СЂРѕРєРё РјР°С‚СЂРёС†С‹ Рђ
 const int num_i = 50;
 
-// объявляем матрицы размером N
+// РѕР±СЉСЏРІР»СЏРµРј РјР°С‚СЂРёС†С‹ СЂР°Р·РјРµСЂРѕРј N
 double matr[N][N];
 double B[N];
 double E[N][N];
@@ -25,7 +25,7 @@ double segmEK[N];
 double mini_segmM[num_i];
 double mini_segmE[num_i];
 
-// получаем рандомное число
+// РїРѕР»СѓС‡Р°РµРј СЂР°РЅРґРѕРјРЅРѕРµ С‡РёСЃР»Рѕ
 double GetRandom(const int min, const int max)
 {
     return rand() % (max - min + 1) + min;
@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    //Заполнение матрицы A, B и E
+    //Р—Р°РїРѕР»РЅРµРЅРёРµ РјР°С‚СЂРёС†С‹ A, B Рё E
     if (rank == 0)
     {
         for (int i = 0; i < N; i++)
@@ -58,7 +58,7 @@ int main(int argc, char* argv[])
         }
     }
 
-    // Прямой ход
+    // РџСЂСЏРјРѕР№ С…РѕРґ
     double t = clock();
 
     double div, multi;
@@ -81,7 +81,7 @@ int main(int argc, char* argv[])
                 }
                 if (!changed)
                 {
-                    cout << endl << "Error: матрица не может быть найдена" << endl;
+                    cout << endl << "Error: РјР°С‚СЂРёС†Р° РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РЅР°Р№РґРµРЅР°" << endl;
                     return -1;
                 }
             }
@@ -132,7 +132,7 @@ int main(int argc, char* argv[])
         MPI_Gather(segmE, N * num_i, MPI_DOUBLE, E, N * num_i, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     }
 
-    //Обратный ход
+    //РћР±СЂР°С‚РЅС‹Р№ С…РѕРґ
     for (int k = N - 1; k > 0; k--)
     {
         if (rank == 0)
@@ -171,7 +171,7 @@ int main(int argc, char* argv[])
     MPI_Bcast(B, N, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Scatter(E, num_i * N, MPI_DOUBLE, segmE, num_i * N, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
-    // Вычисление X
+    // Р’С‹С‡РёСЃР»РµРЅРёРµ X
     for (int i = 0; i < num_i; i++)
     {
         segmentX[i] = 0;
@@ -183,12 +183,12 @@ int main(int argc, char* argv[])
 
     if (rank == 0)
     {
-        cout << "\nСистема уравнений:";
+        cout << "\nРЎРёСЃС‚РµРјР° СѓСЂР°РІРЅРµРЅРёР№:";
         for (int i = 0; i < N; i++)
             cout << "\nx" << i + 1 << " = " << X[i];
 
         t = (clock() - t) / 1000;
-        cout << "\n\nВремя, потраченное на вычисления: " << t << "с.\n";
+        cout << "\n\nР’СЂРµРјСЏ, РїРѕС‚СЂР°С‡РµРЅРЅРѕРµ РЅР° РІС‹С‡РёСЃР»РµРЅРёСЏ: " << t << "СЃ.\n";
     }
     MPI_Finalize();
     return 0;
